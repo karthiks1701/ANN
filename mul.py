@@ -1,7 +1,7 @@
 import numpy as np
     
  
-a=np.array([1,1])
-b=np.array([2,1])    
-x=a.dot(b)
-print(x)
+a=np.random.randn(2,2)
+print(a)
+b=a[:,1].T
+print(b)

@@ -11,7 +11,7 @@ class madaline:
         self.bias_weight=1;
         self.DesiredTarget=np.array([-1,1,1,-1])
         self.learningfactor=0.05
-        self.maxepochs=10
+        self.maxepochs=50
         self.noofinputs=2
         self.noofoutput=1
         self.noofoutputpatterns=4
