@@ -1,7 +1,8 @@
 import numpy as np
     
  
-a=np.random.randn(2,2)
+a=np.random.random_integers(1,3,size=[2,2])
+b=np.random.random_integers(1,3,size=[2,1])
 print(a)
-b=a[:,1].T
 print(b)
+print(np.dot(b.T,a))

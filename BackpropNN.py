@@ -11,6 +11,7 @@ class BackpropNN:
         self.zi = np.dot(self.Wi, x) + self.bi
         self.a = self.sigmoid(self.zi)
         self.zh = np.dot(self.Wh, self.a) + self.bh
+        print("answer",self.sigmoid(self.zh))
         return self.sigmoid(self.zh)
 
     def sig_derivative(self, x):
@@ -46,3 +47,8 @@ class BackpropNN:
             self.Wh -= learning_rate*dWh
             self.bh -= learning_rate*dbh
             print("loss:", str(l))
+            
+if __name__ == '__main__':
+        NN=BackpropNN(2,2,1,1)
+        NN.train([(np.array([[1],[-1]]),np.array([[1]])),(np.array([[-1],[1]]),np.array([[1]])),(np.array([[1],[1]]),np.array([[-1]])),(np.array([[-1],[-1]]),np.array([[-1]]))],0.5,1000)
+        NN.forward([(np.array([[1],[1]]))])

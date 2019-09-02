@@ -54,7 +54,7 @@ class madaline:
                 
                 #print(self.input[j].dot(self.weights))
                 
-                self.hiddenoutput=self.activation(sum)
+                self.hiddenoutput=self.activation(sum.copy())
                 print("\n")
                 finalsum=self.outputbias+self.hiddenoutput.dot(self.outputweights)
                 self.outactivation(finalsum,j)
