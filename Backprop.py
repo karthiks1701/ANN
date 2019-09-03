@@ -1,63 +1,54 @@
 import numpy as np
 
-class neuralnet():
-    def __init__(self,output,inp,hidden):
-        self.wi=np.random.randn(hidden,inp)
-        self.wh=np.random.randn(output,hidden)
-        self.bi=np.random.randn(hidden,1)
-        self.bo=np.random.randn(output,1)
-        self.learningrate=0.5
-        self.epochs=500
+
+
+X = np.array(([1, 1], [1, -1], [1, -1],[-1,-1]), dtype=float)
+y = np.array(([0], [1], [1],[0]), dtype=float)
+
+
+class Neural_Network(object):
+  def __init__(self):
+    self.inputSize = 2
+    self.outputSize = 1
+    self.hiddenSize = 3
+
     
-    def sigmoid(self,inp,der=True):
-        if der==True:
-            return 1/(1+np.exp(-1*inp))
-        else:
-            return np.exp(-1*inp)/((1+np.exp(-1*inp))**2)
-        
-    def forward(self,inp):
-        self.zi = np.dot(self.wi, inp) + self.bi
-        self.a = self.sigmoid(self.zi)
-        self.zh = np.dot(self.wh, self.a) + self.bo
-        print(self.sigmoid(self.zh))
-        return self.sigmoid(self.zh)
-    
-    def loss(self,x,y):
-        return (np.sum(x - y)**2)
-    
-    def Train(self,data):
-        for epoch in range(self.epochs):
-            dWh, dbh, dWi, dbi, m, l = np.zeros(self.wh.shape), np.zeros(self.bo.shape), np.zeros(self.wi.shape), np.zeros(self.bi.shape), len(data), 0
-            for (x, y) in data:
-                y_hat = self.forward(x)
-                l += self.loss(y_hat, y)
-                dzh = 2*(y_hat - y)*self.sigmoid(self.zh,False)
-                dWh += dzh*self.a.T
-                dbh += dzh
-                da = np.sum(dzh*self.wh, axis=0).reshape((-1, 1))
-                dzi = self.sigmoid(self.zi,False)
-                dWi += dzi*x.T
-                dbi += dzi
-            l /= m
-            dWh /= m
-            dbh /= m
-            dWi /= m
-            dbi /= m
-            self.wi -= self.learningrate*dWi
-            self.bi -= self.learningrate*dbi
-            self.wh -= self.learningrate*dWh
-            self.bo -= self.learningrate*dbh
-        print(self.wi)
-        print(self.wh)
-        print(self.bi)
-        print(self.bo)
-        
-        
-        
-if __name__ == '__main__':
-        NN=neuralnet(1,2,2)
-        NN.Train([(np.array([[1],[-1]]),np.array([[1]])),(np.array([[-1],[1]]),np.array([[1]])),(np.array([[1],[1]]),np.array([[-1]])),(np.array([[-1],[-1]]),np.array([[-1]]))])
-        NN.forward([(np.array([[-1],[1]]))])
-      
-        
-                 
+    self.W1 = np.random.randn(self.inputSize, self.hiddenSize)
+    self.W2 = np.random.randn(self.hiddenSize, self.outputSize)
+
+  def forward(self, X):
+    self.z = np.dot(X, self.W1) 
+    self.z2 = self.sigmoid(self.z) 
+    self.z3 = np.dot(self.z2, self.W2) 
+    o = self.sigmoid(self.z3) 
+    return o 
+
+  def sigmoid(self, s):
+    return 1/(1+np.exp(-s))
+
+  def sigmoidPrime(self, s):
+    return s * (1 - s)
+
+  def backward(self, X, y, o):
+    self.o_error = y - o 
+    self.o_delta = self.o_error*self.sigmoidPrime(o)
+
+    self.z2_error = self.o_delta.dot(self.W2.T) 
+    self.z2_delta = self.z2_error*self.sigmoidPrime(self.z2)
+
+    self.W1 += X.T.dot(self.z2_delta) 
+    self.W2 += self.z2.T.dot(self.o_delta) 
+
+  def train (self, X, y):
+    o = self.forward(X)
+    self.backward(X, y, o)
+
+NN = Neural_Network()
+for i in range(0,1000): 
+  print ("Input: \n" + str(X)) 
+  print ("Actual Output: \n" + str(y)) 
+  print ("Predicted Output: \n" + str(NN.forward(X))) 
+  print ("Loss: \n" + str(np.mean(np.square(y - NN.forward(X))))) 
+  print ()
+  NN.train(X, y)
+  

@@ -23,11 +23,7 @@ class knn:
         return output
     
     def updation(self,j,inp1):
-        #print(self.W[:,j])
-        #print(self.learningfactor*(inp1.T-self.W[:,j]))
         self.W[:,j]=self.W[:,j]+self.learningfactor*(inp1.T-self.W[:,j])
-        
-        #print(self.W)
         
     def Training(self):
         for epoch in range(0,self.noofepoch):
